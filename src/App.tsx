@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import NewTask from "./components/NewTask/NewTask";
-import { ITask } from "./components/types/shared";
+import { ITask } from "./types/shared";
 import Tasks from "./components/Tasks/Tasks";
-import { URL } from "./components/url/url";
+import { URL } from "./url/url";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);

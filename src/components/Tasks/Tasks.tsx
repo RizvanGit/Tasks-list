@@ -3,7 +3,7 @@ import TaskItem from "./TaskItem";
 import Section from "../UI/Section";
 
 import styles from "./Tasks.module.css";
-import { ITask } from "../types/shared";
+import { ITask } from "../../types/shared";
 
 type TasksType = {
   items: ITask[];

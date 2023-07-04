@@ -2,7 +2,8 @@ import { FC, useState } from "react";
 import Section from "../UI/Section";
 import TaskForm from "./TaskForm";
 import { ITask } from "../types/shared";
-import { URL } from "../../App";
+
+import { URL } from "../url/url";
 
 const NewTask: FC<{ onAddTask: (task: ITask) => void }> = (props) => {
   const [isLoading, setIsLoading] = useState(false);

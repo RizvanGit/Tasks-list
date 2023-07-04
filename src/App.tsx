@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import NewTask from "./components/NewTask/NewTask";
 import { ITask } from "./components/types/shared";
 import Tasks from "./components/Tasks/Tasks";
+import { URL } from "./components/url/url";
 
-export const URL =
-  "https://ts-react-tasks-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +48,12 @@ function App() {
   return (
     <React.Fragment>
       <NewTask onAddTask={addTaskHandler} />
-      <Tasks items={tasks} />
+      <Tasks
+        items={tasks}
+        error={error}
+        loading={isLoading}
+        onFetch={fetchTasks}
+      />
     </React.Fragment>
   );
 }

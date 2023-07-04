@@ -5,7 +5,13 @@ import Section from "../UI/Section";
 import styles from "./Tasks.module.css";
 import { ITask } from "../types/shared";
 
-const Tasks: FC<{ items: ITask[] }> = (props) => {
+type TasksType = {
+  items: ITask[];
+  error: string | null;
+  loading: boolean;
+  onFetch: () => void;
+};
+const Tasks: FC<TasksType> = (props) => {
   let taskList = <h2>No tasks found. You can add some!</h2>;
 
   if (props.items.length > 0) {
@@ -18,7 +24,13 @@ const Tasks: FC<{ items: ITask[] }> = (props) => {
     );
   }
 
-  const content = taskList;
+  let content = taskList;
+  if (props.error) {
+    content = <button onClick={props.onFetch}>Try again</button>;
+  }
+  if (props.loading) {
+    content = <h3>Loading...</h3>;
+  }
   return (
     <Section>
       <div className={styles.container}>{content}</div>

@@ -1,60 +1,49 @@
-import React, { useEffect, useState } from "react";
-import NewTask from "./components/NewTask/NewTask";
-import { ITask } from "./types/shared";
+import { useEffect, useState } from "react";
+import "./App.css";
+import { TasksType, URL } from "./types/types";
+import useFetch from "./hooks/use-fetch";
 import Tasks from "./components/Tasks/Tasks";
-import { URL } from "./url/url";
+import NewTask from "./components/NewTask/NewTask/NewTask";
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [tasks, setTasks] = useState<TasksType[]>([]);
 
-  const fetchTasks = async () => {
-    setIsLoading(true);
-    setError(null);
+  const { isLoading, error, sendRequest: fetchTasks } = useFetch();
 
-    try {
-      const response = await fetch(URL);
+  useEffect(() => {
+    const tasksHandler = (taskObj: any) => {
+      const loadedTasks = [];
 
-      if (!response.ok) {
-        throw new Error("Request failed!");
-      }
-      const data = await response.json();
-
-      const loadedTasks: ITask[] = [];
-
-      for (const taskKey in data) {
+      for (const taskKey in taskObj) {
         loadedTasks.push({
           id: taskKey,
-          text: data[taskKey].text,
+          text: taskObj[taskKey].text,
         });
       }
       setTasks(loadedTasks);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      }
-    }
-    setIsLoading(false);
-  };
+    };
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+    fetchTasks(
+      {
+        url: URL.TASKS,
+      },
+      tasksHandler
+    );
+  }, [fetchTasks]);
 
-  const addTaskHandler = (task: ITask) => {
+  const taskAddHandler = (task: TasksType) => {
     setTasks((prevState) => prevState.concat(task));
   };
   return (
-    <React.Fragment>
-      <NewTask onAddTask={addTaskHandler} />
+    <>
+      <NewTask onAddTask={taskAddHandler} />
       <Tasks
         items={tasks}
-        error={error}
         loading={isLoading}
+        error={error}
         onFetch={fetchTasks}
       />
-    </React.Fragment>
+    </>
   );
 }
 

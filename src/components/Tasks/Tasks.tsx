@@ -1,33 +1,29 @@
 import { FC } from "react";
-import TaskItem from "./TaskItem";
-import Section from "../UI/Section";
-
+import { TasksComponentProps } from "../../types/types";
+import Section from "../UI/Section/Section";
 import styles from "./Tasks.module.css";
-import { ITask } from "../../types/shared";
+import TaskItem from "./TaskItem/TaskItem";
 
-type TasksType = {
-  items: ITask[];
-  error: string | null;
-  loading: boolean;
-  onFetch: () => void;
-};
-const Tasks: FC<TasksType> = (props) => {
-  let taskList = <h2>No tasks found. You can add some!</h2>;
+const Tasks: FC<TasksComponentProps> = (props) => {
+  let tasksList = <h2>No tasks found, start adding some!</h2>;
 
   if (props.items.length > 0) {
-    taskList = (
+    tasksList = (
       <ul>
-        {props.items.map((task: ITask) => {
-          return <TaskItem key={task.id}>{task.text}</TaskItem>;
-        })}
+        {props.items.map((item) => (
+          <TaskItem key={item.id}>{item.text}</TaskItem>
+        ))}
       </ul>
     );
   }
+  let content = tasksList;
 
-  let content = taskList;
   if (props.error) {
-    content = <button onClick={props.onFetch}>Try again</button>;
+    console.error(props.error);
+
+    content = <button onClick={() => props.onFetch}>Try again</button>;
   }
+
   if (props.loading) {
     content = <h3>Loading...</h3>;
   }
